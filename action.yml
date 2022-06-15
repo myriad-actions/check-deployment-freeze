@@ -38,4 +38,4 @@ runs:
       if: ${{ env.DFS != 'unfrozen' }} 
       uses: actions/github-script@main
       with:
-        script: core.setFailed('The deployment on ${{ inputs.cluster }} is frozen for ${{ inputs.service-name }} .')
+        script: core.setFailed('The deployment on ${{ inputs.cluster }}:${{ inputs.service-name }} is frozen.')
