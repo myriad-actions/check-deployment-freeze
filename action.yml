@@ -19,11 +19,11 @@ runs:
   steps:
     - name: load variables
       id: load-vars
-      uses: myriad-actions/load-variables@v1
+      uses: myriad-actions/load-variables@main
       with:
         config-path: ${{ inputs.config-path }}
     - name: configure AWS credentials 
-      uses: aws-actions/configure-aws-credentials@v1
+      uses: aws-actions/configure-aws-credentials@main
       with:
         role-to-assume: ${{ fromJson(steps.load-vars.outputs.vars).role-to-assume }}
         aws-region: ${{ fromJson(steps.load-vars.outputs.vars).aws-region }}
@@ -34,7 +34,7 @@ runs:
         --query 'services[].tags[?key==`deployment-freeze-status`].value[].[]' | jq -r ".[]") > $GITHUB_ENV
       shell: bash
     - name: check_freeze_status
-      if: ${{ env.DFS == 'frozen' || env.DFS == null  }} 
+      if: ${{ env.DFS != 'unfrozen' }} 
       uses: actions/github-script@main
       with:
         script: core.setFailed('The deployment on ${{ inputs.cluster }} is freezed for ${{ inputs.service-name }} .')
