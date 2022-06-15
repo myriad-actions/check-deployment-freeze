@@ -30,10 +30,7 @@ runs:
         aws-region: ${{ fromJson(steps.load-vars.outputs.vars).aws-region }}
     - name: retrieve tag value
       run: |
-        echo DFS=$(aws ecs describe-services \
-        --include "TAGS" \ 
-        --services ${{ inputs.service-name }} --cluster ${{ inputs.cluster }} \
-        --query 'services[].tags[?key==`deployment-freeze-status`].value[]' | jq -r ".[]") > $GITHUB_ENV
+        echo DFS=$(aws ecs describe-services --include "TAGS" --services ${{ inputs.service-name }} --cluster ${{ inputs.cluster }} --query 'services[].tags[?key==`deployment-freeze-status`].value[]' | jq -r ".[]") > $GITHUB_ENV
       shell: bash
     - name: check_freeze_status
       if: ${{ env.DFS != 'unfrozen' }} 
