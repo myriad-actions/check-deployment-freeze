@@ -24,14 +24,17 @@ runs:
       if: ${{  inputs.environment == 'testing' }} && ${{  env.HOST_MODE == 'ecs' }}
       run: |
         echo "CLUSTER=${{ env.AWS-ECS-CLUSTER-NAME-TESTING }}" >> $GITHUB_ENV
+      shell: bash
     - name: load preprod config
       if: ${{  inputs.environment == 'preprod' }}  && ${{  env.HOST_MODE == 'ecs' }}
       run: |
         echo "CLUSTER=${{ env.AWS-ECS-CLUSTER-NAME-PREPROD }}" >> $GITHUB_ENV
+      shell: bash
     - name: load prod config
       if: ${{  inputs.environment == 'prod' }}  && ${{  env.HOST_MODE == 'ecs' }}
       run: |
         echo "CLUSTER=${{ env.AWS-ECS-CLUSTER-NAME-PROD }}" >> $GITHUB_ENV
+      shell: bash
     - name: Configure AWS credentials 
       uses: aws-actions/configure-aws-credentials@v1
       with:
