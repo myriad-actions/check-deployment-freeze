@@ -1,10 +1,13 @@
 name: 'check deployment freeze'
-description: 'A deployment_freeze_status tag is defined on AWS resource,  '
+
+description: 'A deployment-freeze-status tag is defined on AWS resource,  '
+
 inputs:
-  cluster:
-    description: >
-      The name of the ecs cluster, inside which the service is defined
+  environment:
+    description: >-
+      one of the testing, preprod or prod envinronment, for the workflow run
     required: true
+    type: string
   github-pat:
     description: >-
       GitHub personal access token
@@ -37,10 +40,10 @@ runs:
     - name: retrieve ecs value
       if: ${{ env.HOST_MODE == 'ecs' }}
       run: |
-        echo DFS=$(aws ecs describe-services --include "TAGS" --services ${{ github.event.repository.name }} --cluster ${{ inputs.cluster }} --query 'services[].tags[?key==`deployment-freeze-status`].value[]' | jq -r ".[]") > $GITHUB_ENV
+        echo DFS=$(aws ecs describe-services --include "TAGS" --services ${{ github.event.repository.name }} --cluster ${{ env.CLUSTER }} --query 'services[].tags[?key==`deployment-freeze-status`].value[]' | jq -r ".[]") > $GITHUB_ENV
       shell: bash
     - name: check_freeze_status
       if: ${{ env.DFS != 'unfrozen' }} 
       uses: actions/github-script@main
       with:
-        script: core.setFailed('The deployment on ${{ inputs.cluster }}:${{ inputs.service-name }} is frozen.')
+        script: core.setFailed('The deployment on ${{ env.CLUSTER }}:${{ inputs.service-name }} is frozen.')
