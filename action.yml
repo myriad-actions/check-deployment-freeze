@@ -14,7 +14,8 @@ runs:
       with:
         role-to-assume: ${{ env.AWS-ROLE-TO-ASSUME }}
         aws-region: ${{ env.AWS-REGION }}
-    - name: retrieve tag value
+    - name: retrieve ecs value
+      if: ${{ env.HOST_MODE == 'ecs' }}
       run: |
         echo DFS=$(aws ecs describe-services --include "TAGS" --services ${{ github.event.repository.name }} --cluster ${{ inputs.cluster }} --query 'services[].tags[?key==`deployment-freeze-status`].value[]' | jq -r ".[]") > $GITHUB_ENV
       shell: bash
