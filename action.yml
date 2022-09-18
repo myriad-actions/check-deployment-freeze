@@ -19,7 +19,7 @@ runs:
     - name: init job  
       uses: myriad-actions/init-job@main
       with:
-        github-pat: ${{ secrets.github-pat }}
+        github-pat: ${{ inputs.github-pat }}
     - name: load testing config
       if: ${{  inputs.environment == 'testing' }} && ${{  env.HOST_MODE == 'ecs' }}
       run: |
