@@ -43,7 +43,7 @@ runs:
     - name: retrieve ecs value
       if: ${{ env.HOST_MODE == 'ecs' }}
       run: |
-        echo DFS=$(aws ecs describe-services --include "TAGS" --services ${{ github.event.repository.name }} --cluster ${{ env.CLUSTER }} --query 'services[].tags[?key==`deployment-freeze-status`].value[]' | jq -r ".[]") > $GITHUB_ENV
+        echo DFS=$(aws ecs describe-services --include "TAGS" --services ${{ env.ECS_TASK }} --cluster ${{ env.CLUSTER }} --query 'services[].tags[?key==`deployment-freeze-status`].value[]' | jq -r ".[]") > $GITHUB_ENV
       shell: bash
     - name: check_freeze_status
       if: ${{ env.DFS != 'unfrozen' }} 
