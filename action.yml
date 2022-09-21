@@ -12,6 +12,19 @@ inputs:
     description: >-
       GitHub personal access token
     required: true
+outputs:
+  testing:
+    description: >-
+      the depolyment frozen status of testing platform
+    value: ${{ steps.check-testing-status.outputs.status }}
+  preprod:
+    description: >-
+      the depolyment frozen status of preprod platform
+    value: ${{ steps.check-preprod-status.outputs.status }}
+  prod:
+    description: >-
+      the depolyment frozen status of testing platform
+    value: ${{ steps.check-prod-status.outputs.status }}
 
 runs:
   using: "composite"
@@ -50,3 +63,11 @@ runs:
       uses: actions/github-script@main
       with:
         script: core.setFailed('The deployment on ${{ env.CLUSTER }}:${{ inputs.service-name }} is frozen.')
+        
+    - name: check-testing-status
+      run: |
+      [[ ${{ env.HOST_MODE == 'ecs' }} ]] && \ 
+      echo "::set-output name=status::$(aws ecs describe-services --include "TAGS" --services ${{ env.ECS_TASK }} --cluster ${{ env.CLUSTER }} --query 'services[].tags[?key==`deployment-freeze-status`].value[]' | jq -r ".[]") || \
+      
+      
+    - name: check-testing-status
