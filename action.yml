@@ -64,8 +64,8 @@ runs:
       with:
         script: core.setFailed('The deployment on ${{ env.CLUSTER }}:${{ inputs.service-name }} is frozen.')
         
-    - name: check-testing-status
-      run: |
-      [[ ${{ env.HOST_MODE == 'ecs' }} ]] && \ 
-      echo "::set-output name=status::$(aws ecs describe-services --include "TAGS" --services ${{ env.ECS_TASK }} --cluster ${{ env.CLUSTER }} --query 'services[].tags[?key==`deployment-freeze-status`].value[]' | jq -r ".[]") || \
-      echo "::set-output name=status::"TODO"
+    #- name: check-testing-status
+    #  run: |
+    #  [[ ${{ env.HOST_MODE == 'ecs' }} ]] && \ 
+    #  echo "::set-output name=status::$(aws ecs describe-services --include "TAGS" --services ${{ env.ECS_TASK }} --cluster ${{ env.CLUSTER }} --query 'services[].tags[?key==`deployment-freeze-status`].value[]' | jq -r ".[]") || \
+    #  echo "::set-output name=status::"TODO"
