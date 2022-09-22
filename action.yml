@@ -68,6 +68,4 @@ runs:
       run: |
       [[ ${{ env.HOST_MODE == 'ecs' }} ]] && \ 
       echo "::set-output name=status::$(aws ecs describe-services --include "TAGS" --services ${{ env.ECS_TASK }} --cluster ${{ env.CLUSTER }} --query 'services[].tags[?key==`deployment-freeze-status`].value[]' | jq -r ".[]") || \
-      
-      
-    - name: check-testing-status
+      echo "::set-output name=status::"TODO"
